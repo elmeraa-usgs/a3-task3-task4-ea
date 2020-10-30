@@ -17,7 +17,7 @@ library(lubridate)
 ## Call in urchins data and clean column names
 ```{r, message = FALSE}
 urchins <- read_csv(here("data","urchins.csv"))
-urchins_clean <- urchins %>%clean_names()
+urchins_clean <- urchins %>% clean_names()
 ```
 
 ## i. Exploratory data visualizaton

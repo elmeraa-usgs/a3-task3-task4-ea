@@ -1,0 +1,36 @@
+---
+title: "a3_task4_elmera_azadpour"
+author: "Elmera Azadpour"
+date: "10/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(kableExtra)
+library(lubridate)
+```
+
+
+```{r}
+urchins <- read_csv(here("data","urchins.csv"))
+urchins_clean <- urchins %>% clean_names()
+purple_urchins <- urchins_clean %>% 
+  filter(common_name %in% c("Purple Urchin")) %>%
+  mutate(Date = ymd(date)) %>% 
+  mutate(Year = year(Date)) %>% 
+  mutate(Month = month(Date)) %>% 
+  mutate(site_full = case_when(
+    site == c("NAPL") ~ "Naples Reef", 
+    site == c("AQUE") ~ "Arroyo Quemado Reef",
+    site == c("CARP") ~ "Carpinteria Reef",
+    site == c("MOHK") ~ "Mohawk Reef",
+    site == c("IVEE") ~ "Isla Vista Reef"))
+
+
+```
+
+
