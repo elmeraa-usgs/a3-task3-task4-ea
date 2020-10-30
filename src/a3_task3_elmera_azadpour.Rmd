@@ -1,0 +1,82 @@
+---
+title: "a3task3_ea"
+author: "Elmera Azadpour"
+date: "10/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+library(kableExtra)
+library(lubridate)
+```
+
+## Call in urchins data and clean column names
+```{r, message = FALSE}
+urchins <- read_csv(here("data","urchins.csv"))
+urchins_clean <- urchins %>%clean_names()
+```
+
+## i. Exploratory data visualizaton
+```{r}
+ggplot(data=urchins_clean, aes(x=size)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~common_name)
+
+ggplot(data=urchins_clean, aes(x=common_name, y=size)) +
+  geom_boxplot()
+```
+
+## ii. Descriptive statistics table
+```{r}
+urchins_stats <- urchins_clean %>% 
+  group_by(common_name) %>% 
+  summarise(mean_size = mean(size), 
+            sd_size = sd(size),
+            n = n())
+
+urchins_stats %>% 
+  kable(col.names = c("Species",
+                      "Mean size (cm)", 
+                      "Standard deviation (cm)",
+                      "Sample size (n)")) %>% 
+  kable_styling(full_width = FALSE)
+```
+
+## iii. sentences briefly describing your overall takeaways about how the size (distribution, central tendency, spread, etc.) compare between the two species of urchins:
+- Looking at the histogram, the red urchins data seems to be more normally distributed whereas the purple urchins data seems to be skewed a little more towards smaller sizes. This follows the trend because the mean for purple is 2.31 less than red. Purple has a smaller standard deviation suggesting that the values are closer to the mean, whereas red has a larger sd suggesting that the values are a bit more spread.
+
+## Explore purple urchin counts by site and year
+```{r}
+urchins_clean <- urchins_clean %>% 
+  mutate(date = mdy(date))
+
+class(urchins_clean$date)
+
+purple_urchins <- urchins_clean %>% 
+  filter(common_name %in% c("Purple Urchin")) %>%
+  mutate(Date = ymd(date)) %>% 
+  mutate(Year = year(Date)) %>% 
+  mutate(site_full = case_when(
+    site == c("NAPL") ~ "Naples Reef", 
+    site == c("AQUE") ~ "Arroyo Quemado Reef",
+    site == c("CARP") ~ "Carpinteria Reef",
+    site == c("MOHK") ~ "Mohawk Reef",
+    site == c("IVEE") ~ "Isla Vista Reef"))
+
+urchins_sum <- purple_urchins %>% 
+  group_by(site_full, Year) %>% 
+  count(site_full)
+```
+
+
+## Make an exploratory graph of counts of purple urchins recorded at each site over time for the years included in the study
+```{r}
+ggplot(data=urchins_sum, aes(x = Year, y = n)) + 
+  geom_line(aes(col = site_full)) +
+  geom_point(aes(col = site_full))
+```
+
