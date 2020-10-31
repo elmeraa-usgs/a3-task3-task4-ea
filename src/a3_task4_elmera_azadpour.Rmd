@@ -14,10 +14,17 @@ library(kableExtra)
 library(lubridate)
 ```
 
-
+## Code from task 3
 ```{r}
 urchins <- read_csv(here("data","urchins.csv"))
+
 urchins_clean <- urchins %>% clean_names()
+
+urchins_clean <- urchins_clean %>% 
+  mutate(date = mdy(date))
+
+class(urchins_clean$date)
+
 purple_urchins <- urchins_clean %>% 
   filter(common_name %in% c("Purple Urchin")) %>%
   mutate(Date = ymd(date)) %>% 
@@ -30,7 +37,69 @@ purple_urchins <- urchins_clean %>%
     site == c("MOHK") ~ "Mohawk Reef",
     site == c("IVEE") ~ "Isla Vista Reef"))
 
-
 ```
+
+## Wrangle the urchins data to only include Naples Reef observations for purple urchins observed in January 2010
+```{r}
+purple_naples <- purple_urchins %>% filter(site_full %in% c("Naples Reef"), Year %in% 2010, Month %in% 1) 
+```
+
+## Look at and consider histograms for the size distribution for each of the treatments (Control and Annual) to assess normality.
+```{r}
+ggplot(data=purple_naples, aes(x=size)) +
+  geom_histogram(bins = 15) +
+  facet_wrap(~treatment)
+```
+
+## Look at and consider QQ-Plots for the size distribution for each of the treatments (Control and Annual) to assess normality.
+```{r}
+ggplot(data=purple_naples, aes(sample=size)) +
+  geom_qq() +
+  facet_wrap(~treatment)
+```
+
+## Write 1 - 2 sentences describing your main takeaways about the distribution of urchin sizes for each group.
+- control appears to be more negatively skewed than annual, however they both seem to be fairly normally distributed and pretty linear when looking at the QQ plot.
+
+
+
+## Descriptive statistics table of treatment, mean, sd and sample size
+```{r}
+purple_naples_stats <- purple_naples %>% 
+  group_by(treatment) %>% 
+  summarise(mean_size = mean(size), 
+            sd_size = sd(size),
+            n = n())
+
+purple_naples_stats %>% 
+  kable(col.names = c("Treatment",
+                      "Mean size (cm)", 
+                      "Standard deviation",
+                      "Sample size (n)")) %>% 
+  kable_styling(full_width = FALSE)
+```
+
+
+
+## Perform a two-sample t-test to compare means between the two groups
+```{r}
+annual_sample <- purple_naples %>% 
+  filter(treatment == "ANNUAL") %>% 
+  pull(size)
+
+control_sample <- purple_naples %>% 
+  filter(treatment == "CONTROL") %>% 
+  pull(size)
+
+t.test(x=annual_sample, y=control_sample)
+```
+
+## Write a comprehensive statement (2 - 3 sentences) comparing the means that provides meaningful discussion about the means difference beyond (but also including) the p-value, possibly including the actual means and standard deviations for each group, and the actual difference and / or % difference in means.
+- Starting from the bottom up, the t-test tell us the means are fairly close however annual (annual kelp removal) has a 0.186 higher size mean than control (no giant kelp removal). The confidence interval tells us that we would expect the difference in the mean size length between the treatments to be within the confienfde interval range for 95% of the samples taken. Looking one step above, the two sample t-test is testing the null hypothesis that the difference in means is equal to zero.
+
+
+## In a final sentence, write the meaning of the p-value that you found in the t-test above.
+-  The p value tells us that if these samples are drawn from same mean size, which is our null hypothesis, then there about a 25% chance that we could have pulled two random smaples and found samples at least as different as the samples we have in this analysis. So there is not that good of a chance that we could have retrieved these samples from populations with the same mean and gotten means from samples that are at least as different as these are in this analysis. In other words, there's a low likelyhood of this happening so we probably have enough evidence to reject null hypothesis that they're drawn from populations with the same mean.
+
 
 

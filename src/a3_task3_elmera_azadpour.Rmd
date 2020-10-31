@@ -41,13 +41,23 @@ urchins_stats <- urchins_clean %>%
 urchins_stats %>% 
   kable(col.names = c("Species",
                       "Mean size (cm)", 
-                      "Standard deviation (cm)",
+                      "Standard deviation",
                       "Sample size (n)")) %>% 
   kable_styling(full_width = FALSE)
 ```
 
 ## iii. sentences briefly describing your overall takeaways about how the size (distribution, central tendency, spread, etc.) compare between the two species of urchins:
 - Looking at the histogram, the red urchins data seems to be more normally distributed whereas the purple urchins data seems to be skewed a little more towards smaller sizes. This follows the trend because the mean for purple is 2.31 less than red. Purple has a smaller standard deviation suggesting that the values are closer to the mean, whereas red has a larger sd suggesting that the values are a bit more spread.
+
+## Help to contextualize any differences you observe - for example, what is the actual and % difference in mean urchin diameter between the species?
+- actual difference is 2.31, however percent difference is 200% (that is the actual differnce/ average distance *100)
+```{r}
+actual_difference = 6.78 - 4.47
+average_difference = actual_difference/2
+percent_difference = actual_difference/average_difference * 100
+```
+
+
 
 ## Explore purple urchin counts by site and year
 ```{r}
