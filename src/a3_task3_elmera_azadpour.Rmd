@@ -15,13 +15,13 @@ library(lubridate)
 ```
 
 ## Call in urchins data and clean column names
-```{r, message = FALSE}
+```{r, message = FALSE, warning=FALSE}
 urchins <- read_csv(here("data","urchins.csv"))
 urchins_clean <- urchins %>% clean_names()
 ```
 
 ## i. Exploratory data visualizaton
-```{r}
+```{r, message = FALSE, warning=FALSE}
 ggplot(data=urchins_clean, aes(x=size)) +
   geom_histogram(bins = 15) +
   facet_wrap(~common_name)
@@ -31,7 +31,7 @@ ggplot(data=urchins_clean, aes(x=common_name, y=size)) +
 ```
 
 ## ii. Descriptive statistics table
-```{r}
+```{r, message = FALSE, warning=FALSE}
 urchins_stats <- urchins_clean %>% 
   group_by(common_name) %>% 
   summarise(mean_size = mean(size),
@@ -53,7 +53,7 @@ urchins_stats %>%
 
 ## Help to contextualize any differences you observe - for example, what is the actual and % difference in mean urchin diameter between the species?
 - actual difference is 2.31, however percent difference is 0.011% (that is, the mean/sample size of red urchin minus purple urchin * 100)
-```{r}
+```{r, message = FALSE, warning=FALSE}
 red_urchin_diff = 6.776489/27408
 purple_urchin_diff = 4.469797/31805
 red_purple_diff = (red_urchin_diff - purple_urchin_diff) *100
@@ -61,7 +61,7 @@ red_purple_diff
 ```
 
 ## Explore purple urchin counts by site and year
-```{r}
+```{r, message = FALSE, warning=FALSE}
 urchins_clean <- urchins_clean %>% 
   mutate(date = mdy(date))
 
@@ -85,7 +85,7 @@ urchins_sum <- purple_urchins %>%
 
 
 ## Make an exploratory graph of counts of purple urchins recorded at each site over time for the years included in the study
-```{r}
+```{r, message = FALSE, warning=FALSE}
 ggplot(data=urchins_sum, aes(x = Year, y = n)) + 
   geom_line(aes(col = site_full)) +
   geom_point(aes(col = site_full))

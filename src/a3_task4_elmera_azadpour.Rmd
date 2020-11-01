@@ -15,7 +15,7 @@ library(lubridate)
 ```
 
 ## Code from task 3
-```{r}
+```{r, message = FALSE, warning=FALSE}
 urchins <- read_csv(here("data","urchins.csv"))
 
 urchins_clean <- urchins %>% clean_names()
@@ -40,19 +40,19 @@ purple_urchins <- urchins_clean %>%
 ```
 
 ## Wrangle the urchins data to only include Naples Reef observations for purple urchins observed in January 2010
-```{r}
+```{r, message = FALSE, warning=FALSE}
 purple_naples <- purple_urchins %>% filter(site_full %in% c("Naples Reef"), Year %in% 2010, Month %in% 1) 
 ```
 
 ## Look at and consider histograms for the size distribution for each of the treatments (Control and Annual) to assess normality.
-```{r}
+```{r, message = FALSE, warning=FALSE}
 ggplot(data=purple_naples, aes(x=size)) +
   geom_histogram(bins = 15) +
   facet_wrap(~treatment)
 ```
 
 ## Look at and consider QQ-Plots for the size distribution for each of the treatments (Control and Annual) to assess normality.
-```{r}
+```{r, message = FALSE, warning=FALSE}
 ggplot(data=purple_naples, aes(sample=size)) +
   geom_qq() +
   facet_wrap(~treatment)
@@ -63,7 +63,7 @@ ggplot(data=purple_naples, aes(sample=size)) +
 
 
 ## Descriptive statistics table of treatment, mean, sd and sample size
-```{r}
+```{r, message = FALSE, warning=FALSE}
 purple_naples_stats <- purple_naples %>% 
   group_by(treatment) %>% 
   summarise(mean_size = mean(size), 
@@ -81,7 +81,7 @@ purple_naples_stats %>%
 ```
 
 ## Perform a two-sample t-test to compare means between the two groups
-```{r}
+```{r, message = FALSE, warning=FALSE}
 annual_sample <- purple_naples %>% 
   filter(treatment == "ANNUAL") %>% 
   pull(size)
