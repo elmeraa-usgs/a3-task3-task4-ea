@@ -68,12 +68,14 @@ ggplot(data=purple_naples, aes(sample=size)) +
 purple_naples_stats <- purple_naples %>% 
   group_by(treatment) %>% 
   summarise(mean_size = mean(size), 
+            median_size = median(size),
             sd_size = sd(size),
             n = n())
 
 purple_naples_stats %>% 
   kable(col.names = c("Treatment",
-                      "Mean size (cm)", 
+                      "Mean size (cm)",
+                      "Median size (cm)",
                       "Standard deviation",
                       "Sample size (n)")) %>% 
   kable_styling(full_width = FALSE)
@@ -95,11 +97,12 @@ t.test(x=annual_sample, y=control_sample)
 ```
 
 ## Write a comprehensive statement (2 - 3 sentences) comparing the means that provides meaningful discussion about the means difference beyond (but also including) the p-value, possibly including the actual means and standard deviations for each group, and the actual difference and / or % difference in means.
-- Starting from the bottom up, the t-test tell us the means are fairly close however annual (annual kelp removal) has a 0.186 higher size mean than control (no giant kelp removal). The confidence interval tells us that we would expect the difference in the mean size length between the treatments to be within the confienfde interval range for 95% of the samples taken. Looking one step above, the two sample t-test is testing the null hypothesis that the difference in means is equal to zero.
+- Starting from the bottom up, the t-test tell us the means are fairly close however annual (annual kelp removal) has a 0.186 higher size mean than control (no giant kelp removal). The p value is also 0.2536, which is farely high and suggests we can probably accept our null that they're drawn from populations with the same mean. Additionally, when looking at the SD, Annual has a higher SD indicating that the data points are spread out over a larger range of values in comparison to Control which is slightly lower indicating that the data points tend to be closer to the mean. 
+
 
 
 ## In a final sentence, write the meaning of the p-value that you found in the t-test above.
--  The p value tells us that if these samples are drawn from same mean size, which is our null hypothesis, then there about a 25% chance that we could have pulled two random smaples and found samples at least as different as the samples we have in this analysis. So there is not that good of a chance that we could have retrieved these samples from populations with the same mean and gotten means from samples that are at least as different as these are in this analysis. In other words, there's a low likelyhood of this happening so we probably have enough evidence to reject null hypothesis that they're drawn from populations with the same mean.
+-  The p value tells us that if these samples are drawn from same mean size, which is our null hypothesis, then there about a 25% chance that we could have pulled two random samples and found samples at least as different as the samples we have in this analysis. So there is a good of a chance that we could have retrieved these samples from populations with the same mean and gotten means from samples that are at least as different as these are in this analysis. In other words, there's a high likelihood of this happening so we probably have enough evidence to accept null hypothesis that they're drawn from populations with the same mean.
 
 
 
