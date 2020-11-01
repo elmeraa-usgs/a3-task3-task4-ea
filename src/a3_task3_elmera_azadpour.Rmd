@@ -34,27 +34,30 @@ ggplot(data=urchins_clean, aes(x=common_name, y=size)) +
 ```{r}
 urchins_stats <- urchins_clean %>% 
   group_by(common_name) %>% 
-  summarise(mean_size = mean(size), 
+  summarise(mean_size = mean(size),
+            median_size = median((size)),
             sd_size = sd(size),
             n = n())
 
 urchins_stats %>% 
   kable(col.names = c("Species",
                       "Mean size (cm)", 
+                      "Median size (cm)",
                       "Standard deviation",
                       "Sample size (n)")) %>% 
   kable_styling(full_width = FALSE)
 ```
 
 ## iii. sentences briefly describing your overall takeaways about how the size (distribution, central tendency, spread, etc.) compare between the two species of urchins:
-- Looking at the histogram, the red urchins data seems to be more normally distributed whereas the purple urchins data seems to be skewed a little more towards smaller sizes. This follows the trend because the mean for purple is 2.31 less than red. Purple has a smaller standard deviation suggesting that the values are closer to the mean, whereas red has a larger sd suggesting that the values are a bit more spread.
+- Looking at the histogram, the red urchins data seems to be more normally distributed whereas the purple urchins data seems to be skewed a little more towards smaller sizes. This follows the trend because the mean for purple is 2.31 less than red. Purple has a smaller standard deviation suggesting that the values are closer to the mean, whereas red has a larger sd suggesting that the values are a bit more spread. It should also be noted that purple urchins sample size is about 4000 greater than red urchins. 
 
 ## Help to contextualize any differences you observe - for example, what is the actual and % difference in mean urchin diameter between the species?
-- actual difference is 2.31, however percent difference is 200% (that is the actual difference/ average distance *100)
+- actual difference is 2.31, however percent difference is 0.011% (that is, the mean/sample size of red urchin minus purple urchin * 100)
 ```{r}
-actual_difference = 6.78 - 4.47
-average_difference = actual_difference/2
-percent_difference = actual_difference/average_difference * 100
+red_urchin_diff = 6.776489/27408
+purple_urchin_diff = 4.469797/31805
+red_purple_diff = (red_urchin_diff - purple_urchin_diff) *100
+red_purple_diff
 ```
 
 ## Explore purple urchin counts by site and year
