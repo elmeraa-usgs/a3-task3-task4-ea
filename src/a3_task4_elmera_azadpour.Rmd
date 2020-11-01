@@ -62,7 +62,6 @@ ggplot(data=purple_naples, aes(sample=size)) +
 - control appears to be more negatively skewed than annual, however they both seem to be fairly normally distributed and pretty linear when looking at the QQ plot.
 
 
-
 ## Descriptive statistics table of treatment, mean, sd and sample size
 ```{r}
 purple_naples_stats <- purple_naples %>% 
@@ -80,8 +79,6 @@ purple_naples_stats %>%
                       "Sample size (n)")) %>% 
   kable_styling(full_width = FALSE)
 ```
-
-
 
 ## Perform a two-sample t-test to compare means between the two groups
 ```{r}
@@ -106,3 +103,4 @@ t.test(x=annual_sample, y=control_sample)
 
 
 
+## END 
